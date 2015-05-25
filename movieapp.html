@@ -1,0 +1,40 @@
+<head>
+  <title>movieforLULz</title>
+</head>
+
+<body>
+  <h1>My Movie collection</h1>
+
+  {{> hello}}
+</body>
+
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+
+  <table style="width:100%">
+    <tr>
+      <th>Movie Title</th>
+      <th>Release Year</th> 
+      <th>Genre</th>
+      <th>button1</th>
+      <th>button2</th>
+    </tr>
+    {{#each movies}}
+      {{> movieData}}
+    {{/each}}
+  </table>
+</template>
+
+
+
+<!-- template for the movie data -->
+<template name="movieData">
+  <tr>
+    <td>{{MovieTitle}}</td>
+    <td>{{ReleaseYear}}</td> 
+    <td>{{Genre}}</td>
+    <td>{{button1}}</td>
+    <td>{{button2}}</td>
+  </tr>
+</template>
