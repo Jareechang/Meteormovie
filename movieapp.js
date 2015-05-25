@@ -1,16 +1,13 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
 
   Template.body.helpers({
-    counter: function () {
-      return Session.get('counter');
-    },
+    // testing out client side template rendering 
     movies: [
       {MovieTitle: 'Amelie', ReleaseYear: 1991, Genre: 'Horror', button1: 'Edit!', button2: 'Delete'},
       {MovieTitle: 'Amelie', ReleaseYear: 1991, Genre: 'Horror', button1: 'Edit!', button2: 'Delete'},
       {MovieTitle: 'Amelie', ReleaseYear: 1991, Genre: 'Horror', button1: 'Edit!', button2: 'Delete'}
     ]
+
   });
 
   Template.hello.events({
@@ -24,5 +21,6 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+    Tasks = new Mongo.Collection("Movies");
   });
 }
