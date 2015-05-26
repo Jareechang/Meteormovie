@@ -18,16 +18,14 @@
 
     Template.body.helpers({
       // testing out client side template rendering 
-      MovieSortByCreateDate: function () {
+      MovieSortByTitle: function () {
         // Show newest tasks first
-        return Movies.find({}, {sort: {createdAt: Session.get("DefaultSort")}});
+        return Movies.find({}, {sort: {searchTitle: Session.get("DefaultSort")}});
       },
-
-      genre: [
-        {genre: "Horror"},
-        {genre: "Stuff"},
-        {genre: "otherstuff"},
-      ]
+      // data for populating UI genre selections
+      Genre: function(){
+        return Genre.find({}, {sort: {genre: 1}});
+      }
     });
 
     Template.body.events({
@@ -46,7 +44,7 @@
           genre: genre,
           // implementing a normalized searchtitle (all-CAPS) in the document to 
           // off-set case-sensitve sorting  
-          SearchTitle: movieTitle.toUpperCase(),
+          searchTitle: movieTitle.toUpperCase(),
           createdAt: new Date() 
         });
 
@@ -65,8 +63,7 @@
          }else{
             Session.set("DefaultSort", -1);
          }
-          // console.log(data);
-          console.dir(Genre.find({}));
+
          console.log(Session.get("DefaultSort"));
       }
 
@@ -89,7 +86,7 @@
 
   if (Meteor.isServer) {
     Meteor.startup(function () {
-      // Seed the database with Genre data from private/genre.json 
+      // Initially seed the database with Genre data from private/genre.json 
       if(Genre.find().count() === 0) {
         Assets.getText("genre.json", function(err,data){
           JSON.parse(data).forEach(function(item,i,arr){
