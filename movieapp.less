@@ -5,6 +5,7 @@ body,html {
   padding:0;
   height:100%;
   width:100%;
+  font-family: arial;
 }
 
 /*custom form style*/
@@ -46,7 +47,6 @@ tr,td ,th{
 
 .header {
   border-bottom:0.2em solid rgba(128, 128, 128, 0.28);
-  margin-top: -22px;
   position:fixed;
   width:100%;
   background-color:#65E2B0;
@@ -83,7 +83,6 @@ tr,td ,th{
 .movie-section {
   border-top: 0.25em solid black;
   margin:0 auto 0 auto;
-  padding-top:12em;
   width:80%; 
   .footer-title {
     text-align:center;
@@ -121,10 +120,12 @@ tr,td ,th{
 
 .edit-section {
  background-color:#65E2B0;
- margin:1em auto 0 auto;
  text-align:center;
- width:80%;
+ width:50%;
  border:2px solid rgb(197, 197, 197);
+ .title{
+  height:50px;
+ }
   h1 {
     margin:0;
     padding:0.25em;
@@ -132,13 +133,51 @@ tr,td ,th{
   .content {
     background-color:#E9F4F4;
     height:150px;
+    padding:1em;
+    .details {
+      span {text-decoration: underline; font-size:1.2em;}
+      select {height:4em;}
+      padding:1em;
+      width:100%
+      margin:0.2em 2em 0.2em 2em;
+    }
+  }
+  .footer {
+    width:100%;
+    text-align:center;
+    display:inline-block;
+    &> * {
+      display:inline-block;
+    }
+    .content {
+      box-shadow:-1px 2px 12px -5px #3c3c3c;
+    }
+    .update {
+      background-color:rgb(185, 231, 223);
+      margin:1em auto 1em 0.5em; 
+      padding:0.5em;
+      width:20%;
+    }
+    .cancel {
+      background-color:rgb(185, 231, 223);
+      padding:0.5em;
+      margin:1em auto 1em 0.5em;
+      width:20%;
+    }
   }
 }
 
-/*defining custom padding classes*/
+/*defining custom padding & margin classes*/
 
+.margin-sm {
+  margin:1.5em auto 3em auto;
+}
 .padding-xs {
   padding:0.25em;
+}
+.padding-md {
+  padding:4em;
+  margin:0;
 }
 
 .size-xs {

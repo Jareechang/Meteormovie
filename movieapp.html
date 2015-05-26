@@ -27,8 +27,32 @@
       <h1> Analytics stuff</h1>
     </div>
   </div> -->
+  <div class="padding-md"></div>
+  <div class="edit-section margin-sm"> 
+    <div class="title"> 
+      <h1>Edit Section </h1>
+    </div>
+    <div class="content">
+      <div class="details">
+        <h5> Movie Details</h5>
 
-  <div class="movie-section"> 
+        <input type="text" name="movietitle" placeholder="Movie Name" />
+        <input type="text" name="releaseYear" placeholder="Relase Year" />
+        <select name="genre">
+          {{#each Genre}}
+            {{>genreOptions}}
+          {{/each}}
+        </select>
+      </div>
+      <!-- {{/with}} -->
+    </div>
+    <div class="footer">
+      <p class="update">Update</p>
+      <p class="cancel">Cancel</p>
+    </div>
+  </div>
+
+  <div class="movie-section margin-sm"> 
     <div class="footer-title"> 
       <h1>Movies<i class="fa fa-chevron-up size-xs padding-xs"></i></h1>
     </div>
@@ -46,17 +70,6 @@
     </table>
   </div>
 
-  <div class="edit-section"> 
-    <div class="title"> 
-      <h1>Edit Section </h1>
-    </div>
-    <div class="content">
-      {{#with EditMovie}}
-        <p>Movie Title: {{movieTitle}}</p>
-        <p>Release Year: {{releaseYear}}</p>
-      {{/with}}
-    </div>
-  </div>
 </body>
 
 <!-- templates for the movie data  // start-->
