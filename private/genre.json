@@ -1,0 +1,22 @@
+[
+    {"genre": "Action"},
+    {"genre": "Comedy"},
+    {"genre": "Adventure"},
+    {"genre": "Crime"},
+    {"genre": "Fantasy"},
+    {"genre": "Historical"},
+    {"genre": "Historical fiction"},
+    {"genre": "Historical fiction"},
+    {"genre": "Horror"},
+    {"genre": "Mystery"},
+    {"genre": "Paranoid"},
+    {"genre": "Political"},
+    {"genre": "Romance"},
+    {"genre": "Saga"},
+    {"genre": "Satire"},
+    {"genre": "Science fiction"},
+    {"genre": "Slice of Life"},
+    {"genre": "Speculative"},
+    {"genre": "Thriller"},
+    {"genre": "Urban"}
+]

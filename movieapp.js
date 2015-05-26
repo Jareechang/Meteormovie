@@ -5,6 +5,7 @@
 
   // Defining the movie collection 
   Movies = new Mongo.Collection("Movies");
+  Genre = new Mongo.Collection("Genre");
 
 // ********** Collections end   ****************************************
 
@@ -64,7 +65,8 @@
          }else{
             Session.set("DefaultSort", -1);
          }
-          
+          // console.log(data);
+          console.dir(Genre.find({}));
          console.log(Session.get("DefaultSort"));
       }
 
@@ -87,7 +89,14 @@
 
   if (Meteor.isServer) {
     Meteor.startup(function () {
-      // code to run on server at startup
+      // Seed the database with Genre data from private/genre.json 
+      if(Genre.find().count() === 0) {
+        Assets.getText("genre.json", function(err,data){
+          JSON.parse(data).forEach(function(item,i,arr){
+            Genre.insert(item);
+          })
+        });
+      }
     });
   }
 
