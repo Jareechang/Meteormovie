@@ -14,13 +14,13 @@
 
   if (Meteor.isClient) {
     // set session for sorting tables
-    Session.set("DefaultSort", -1);
+    Session.set("sortOption", {searchTitle: -1});
 
     Template.body.helpers({
       // testing out client side template rendering 
       MovieSortByTitle: function () {
         // Show newest tasks first
-        return Movies.find({}, {sort: {searchTitle: Session.get("DefaultSort")}});
+        return Movies.find({}, {sort: Session.get("sortOption") });
       },
       // data for populating UI genre selections
       Genre: function(){
@@ -56,25 +56,27 @@
         return false;
       },
       // event for sorting movie title
-      "click .sortTitle": function(){    
+      "click .sortTitle": function(e){   
+        // variable to determine which sort option = e.handleObj.selector
           // Show newest tasks first
-         if(Session.get("DefaultSort") === -1){
-            Session.set("DefaultSort", 1);
+         if(Session.get("sortOption").searchTitle === -1){
+             Session.set("sortOption", {searchTitle: 1});
          }else{
-            Session.set("DefaultSort", -1);
+             Session.set("sortOption", {searchTitle: -1});
          }
-
-         console.log(Session.get("DefaultSort"));
       }
 
     });
 
     Template.movieDetails.events({
-      
+      // s
       "click .edit": function(){
         console.log(this._id);
         console.dir(Movies.findOne(this._id));
-
+      },
+      // delete event handler 
+      "click .delete": function(){
+        Movies.remove(this._id);
       }
 
     })

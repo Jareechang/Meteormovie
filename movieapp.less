@@ -14,6 +14,9 @@ input, textarea, select {
   font-weight: 300;
   background-color:white;
 }
+body {
+    background-image: url('oct-pattern.png');
+}
 
 .movieDetails {
   text-align:center;
@@ -35,8 +38,9 @@ th {
   background-color:lightgrey;
 }
 
-tr {
+tr,td ,th{
   background-color:#E9F4F4;
+  max-height:30px;
 }
 
 
@@ -75,21 +79,18 @@ tr {
     height:3em;
   }
 }
-footer {
+
+.movie-section {
   border-top: 0.25em solid black;
-  position:fixed !important;
-  width:100%;
-  height:250px;
-  bottom:0px;
-  left:0px;
-  right:0px;
-  margin-bottom:0px;
+  margin:0 auto 0 auto;
+  padding-top:12em;
+  width:80%;
   .footer-title {
     text-align:center;
     height:50px;
     background-color:#65E2B0;
     h1 {
-      padding:0;
+      padding:0.25em;
       margin:0;
     }
   }
@@ -103,8 +104,8 @@ footer {
   .edit div, .delete div {
     padding-top:10px;
   }
-  .open-footer th,.open-footer tr{
-    height:20px;
+  .movieDetails {
+    height:30px;
   }
 }
 
