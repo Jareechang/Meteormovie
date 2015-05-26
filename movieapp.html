@@ -51,7 +51,10 @@
       <h1>Edit Section </h1>
     </div>
     <div class="content">
-      <p>Just writing some stuff  </p>
+      {{#with EditMovie}}
+        <p>Movie Title: {{movieTitle}}</p>
+        <p>Release Year: {{releaseYear}}</p>
+      {{/with}}
     </div>
   </div>
 </body>
