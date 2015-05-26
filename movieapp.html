@@ -5,6 +5,17 @@
 <body>
   <h1>My Movie collection</h1>
 
+  <form class="new-movie">
+    <input type="text" name="movietitle" placeholder="Movie Name" />
+    <input type="text" name="releaseYear" placeholder="Relase Year" />
+    <select name="genre">
+      {{#each genre}}
+        {{>genreOptions}}
+      {{/each}}
+    </select>
+    <input type="submit" value="Add/UpdateMovie">
+  </form>
+
    <table>
     <tr>
       <th>Movie Title</th>
@@ -13,22 +24,33 @@
       <th>button1</th>
       <th>button2</th>
     </tr>
-    {{#each movies}}
-      {{> movieData}}
+    {{#each MovieSortByCreateDate}}
+      {{> movieDetails}}
     {{/each}}
   </table>
+
 </body>
 
-<!-- template for the movie data  // start-->
+<!-- templates for the movie data  // start-->
+  
+  <!-- template for the movie details columns -->
+  <template name="movieDetails">
+    <tr class="movieDetails">
+      <td>{{movieTitle}}</td>
+      <td>{{releaseYear}}</td> 
+      <td>{{genre}}</td>
+      <td class="edit">Edit</td>
+    </tr>
+  </template> 
+  <!-- /template for the movie details columns -->
 
-<template name="movieData">
-  <tr class="movieDetails">
-    <td>{{MovieTitle}}</td>
-    <td>{{ReleaseYear}}</td> 
-    <td>{{Genre}}</td>
-    <td>{{button1}}</td>
-    <td>{{button2}}</td>
-  </tr>
-</template>
 
-<!-- template for the movie data  // end -->
+  <!-- template for the genre selection  -->
+  <template name="genreOptions">
+    <option value={{genre}}>{{genre}}</option> 
+  </template>
+  <!-- /template for the genre selection  -->
+  
+
+<!-- templates for the movie data  // end -->
+
