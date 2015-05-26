@@ -10,7 +10,7 @@
 // ********** Collections end   ****************************************
 
 
-// ********** client Side code start (server.js)  **********************
+// ********** client Side code start (client/client.js)  **********************
 
   if (Meteor.isClient) {
     // set session for sorting tables
@@ -56,14 +56,32 @@
         return false;
       },
       // event for sorting movie title
-      "click .sortTitle": function(e){   
-        // variable to determine which sort option = e.handleObj.selector
+      "click .sortTitle, click .sortYear": function(e){   
+         
           // Show newest tasks first
-         if(Session.get("sortOption").searchTitle === -1){
-             Session.set("sortOption", {searchTitle: 1});
-         }else{
-             Session.set("sortOption", {searchTitle: -1});
-         }
+          // console.log(e.handleObj.selector);
+
+        switch(e.handleObj.selector){
+            case '.sortTitle':
+              if(Session.get("sortOption").searchTitle === -1){
+                   Session.set("sortOption", {searchTitle: 1});
+              }else{
+                   Session.set("sortOption", {searchTitle: -1});
+              }
+              break;
+            case '.sortYear':
+              if(Session.get("sortOption").releaseYear === -1){
+                   Session.set("sortOption", {releaseYear: 1});
+              }else{
+                   Session.set("sortOption", {releaseYear: -1});
+              }
+              break;
+        }
+         // if(Session.get("sortOption").searchTitle === -1){
+         //     Session.set("sortOption", {searchTitle: 1});
+         // }else{
+         //     Session.set("sortOption", {searchTitle: -1});
+         // }
       }
 
     });
@@ -81,6 +99,8 @@
 
     })
   }
-// ********** client Side code end (server.js)  **********************
+// ********** client Side code end (client.js)  **********************
+
+
 
 
