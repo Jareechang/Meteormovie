@@ -12,15 +12,14 @@
 // ********** client Side code start (server.js)  **********************
 
   if (Meteor.isClient) {
+    // set session for sorting tables
+    Session.set("DefaultSort", -1);
 
     Template.body.helpers({
       // testing out client side template rendering 
       MovieSortByCreateDate: function () {
         // Show newest tasks first
-        return Movies.find({}, {sort: {createdAt: -1}});
-      },
-      MovieSortByAlphabeticalOrd: function(){
-        return Movies.find({}, {sort: {movieTitle: 1}});
+        return Movies.find({}, {sort: {createdAt: Session.get("DefaultSort")}});
       },
 
       genre: [
@@ -31,25 +30,42 @@
     });
 
     Template.body.events({
-      'submit .new-movie': function (event) {
-        // This function is called when the new task form is submitted
-        var movieTitle = event.target.movietitle.value;
-        var releaseYear = event.target.releaseYear.value;
-        var genre = event.target.genre.value;
+      'submit .new-movie': function (e) {
+        // prevent default behaviour 
+        e.preventDefault();
+        // Gets the values from the form on submit
+        var movieTitle = e.target.movietitle.value.toLowerCase();;
+        var releaseYear = e.target.releaseYear.value.toLowerCase();;
+        var genre = e.target.genre.value.toLowerCase();;
 
+        // Movies collection insertion 
         Movies.insert({
           movieTitle: movieTitle,
           releaseYear: releaseYear,
           genre: genre,
-          createdAt: new Date() // current time
+          // implementing a normalized searchtitle (all-CAPS) in the document to 
+          // off-set case-sensitve sorting  
+          SearchTitle: movieTitle.toUpperCase(),
+          createdAt: new Date() 
         });
 
         // Clear form
-        event.target.movietitle.value = "";
-        event.target.releaseYear.value = "";
+        e.target.movietitle.value = "";
+        e.target.releaseYear.value = "";
 
         // Prevent default form submit
         return false;
+      },
+      // event for sorting movie title
+      "click .sortTitle": function(){    
+          // Show newest tasks first
+         if(Session.get("DefaultSort") === -1){
+            Session.set("DefaultSort", 1);
+         }else{
+            Session.set("DefaultSort", -1);
+         }
+          
+         console.log(Session.get("DefaultSort"));
       }
 
     });
