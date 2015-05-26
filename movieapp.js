@@ -34,9 +34,9 @@
         // prevent default behaviour 
         e.preventDefault();
         // Gets the values from the form on submit
-        var movieTitle = e.target.movietitle.value.toLowerCase();;
-        var releaseYear = e.target.releaseYear.value.toLowerCase();;
-        var genre = e.target.genre.value.toLowerCase();;
+        var movieTitle = e.target.movietitle.value;
+        var releaseYear = e.target.releaseYear.value;
+        var genre = e.target.genre.value;
 
         // Movies collection insertion 
         Movies.insert({
