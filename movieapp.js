@@ -5,6 +5,7 @@
 
   // Defining the movie collection 
   Movies = new Mongo.Collection("Movies");
+  Genre = new Mongo.Collection("Genre");
 
 // ********** Collections end   ****************************************
 
@@ -13,20 +14,18 @@
 
   if (Meteor.isClient) {
     // set session for sorting tables
-    Session.set("DefaultSort", -1);
+    Session.set("sortOption", {searchTitle: -1});
 
     Template.body.helpers({
       // testing out client side template rendering 
-      MovieSortByCreateDate: function () {
+      MovieSortByTitle: function () {
         // Show newest tasks first
-        return Movies.find({}, {sort: {createdAt: Session.get("DefaultSort")}});
+        return Movies.find({}, {sort: Session.get("sortOption") });
       },
-
-      genre: [
-        {genre: "Horror"},
-        {genre: "Stuff"},
-        {genre: "otherstuff"},
-      ]
+      // data for populating UI genre selections
+      Genre: function(){
+        return Genre.find({}, {sort: {genre: 1}});
+      }
     });
 
     Template.body.events({
@@ -45,7 +44,7 @@
           genre: genre,
           // implementing a normalized searchtitle (all-CAPS) in the document to 
           // off-set case-sensitve sorting  
-          SearchTitle: movieTitle.toUpperCase(),
+          searchTitle: movieTitle.toUpperCase(),
           createdAt: new Date() 
         });
 
@@ -57,40 +56,31 @@
         return false;
       },
       // event for sorting movie title
-      "click .sortTitle": function(){    
+      "click .sortTitle": function(e){   
+        // variable to determine which sort option = e.handleObj.selector
           // Show newest tasks first
-         if(Session.get("DefaultSort") === -1){
-            Session.set("DefaultSort", 1);
+         if(Session.get("sortOption").searchTitle === -1){
+             Session.set("sortOption", {searchTitle: 1});
          }else{
-            Session.set("DefaultSort", -1);
+             Session.set("sortOption", {searchTitle: -1});
          }
-          
-         console.log(Session.get("DefaultSort"));
       }
 
     });
 
     Template.movieDetails.events({
-      
+      // s
       "click .edit": function(){
         console.log(this._id);
         console.dir(Movies.findOne(this._id));
-
+      },
+      // delete event handler 
+      "click .delete": function(){
+        Movies.remove(this._id);
       }
 
     })
   }
 // ********** client Side code end (server.js)  **********************
-
-
-// ********** Server Side code start (server.js)  **********************
-
-  if (Meteor.isServer) {
-    Meteor.startup(function () {
-      // code to run on server at startup
-    });
-  }
-
-// ********** Server Side code end ************************************
 
 
