@@ -1,14 +1,3 @@
-// ********** Collections  start (lib/colelctions.js)  *****************
-  
-  /*  Here we are defining the collection used for this application, 
-       could easily be moved into 'common code' user lib/  */
-
-  // Defining the movie collection 
-  Movies = new Mongo.Collection("Movies");
-  Genre = new Mongo.Collection("Genre");
-
-// ********** Collections end   ****************************************
-
 
 // ********** client Side code start (client/client.js)  **********************
 
@@ -56,6 +45,7 @@
         return false;
       },
       // event for sorting movie title
+
       "click .sortTitle, click .sortYear": function(e){   
          
           // Show newest tasks first
@@ -64,24 +54,19 @@
         switch(e.handleObj.selector){
             case '.sortTitle':
               if(Session.get("sortOption").searchTitle === -1){
-                   Session.set("sortOption", {searchTitle: 1});
+                  Session.set("sortOption", {searchTitle: 1});
               }else{
-                   Session.set("sortOption", {searchTitle: -1});
+                  Session.set("sortOption", {searchTitle: -1});
               }
               break;
             case '.sortYear':
               if(Session.get("sortOption").releaseYear === -1){
-                   Session.set("sortOption", {releaseYear: 1});
+                  Session.set("sortOption", {releaseYear: 1});
               }else{
-                   Session.set("sortOption", {releaseYear: -1});
+                  Session.set("sortOption", {releaseYear: -1});
               }
               break;
         }
-         // if(Session.get("sortOption").searchTitle === -1){
-         //     Session.set("sortOption", {searchTitle: 1});
-         // }else{
-         //     Session.set("sortOption", {searchTitle: -1});
-         // }
       }
 
     });
@@ -100,7 +85,3 @@
     })
   }
 // ********** client Side code end (client.js)  **********************
-
-
-
-

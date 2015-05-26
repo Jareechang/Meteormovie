@@ -1,34 +1,59 @@
 <head>
   <title>movieforLULz</title>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body>
-  <h1>My Movie collection</h1>
+<div class="header">
+  <div class="header-title left">
+    <h1>Popcorn Analytics<i class="fa fa-ticket padding-xs"></i></h1>
+  </div>
+  <div class="form-field right">
+    <form class="new-movie">
+      <input type="text" name="movietitle" placeholder="Movie Name" />
+      <input type="text" name="releaseYear" placeholder="Relase Year" />
+      <select name="genre">
+        {{#each Genre}}
+          {{>genreOptions}}
+        {{/each}}
+      </select>
+      <input type="submit" value="Add/UpdateMovie">
+    </form>
+  </div>
+</div>
+<!-- 
+  <div class="analytics">
+    <div class="filter"> 
+      <h1> Analytics stuff</h1>
+    </div>
+  </div> -->
 
-  <form class="new-movie">
-    <input type="text" name="movietitle" placeholder="Movie Name" />
-    <input type="text" name="releaseYear" placeholder="Relase Year" />
-    <select name="genre">
-      {{#each genre}}
-        {{>genreOptions}}
+  <div class="movie-section"> 
+    <div class="footer-title"> 
+      <h1>Movies<i class="fa fa-chevron-up size-xs padding-xs"></i></h1>
+    </div>
+    <table>
+      <tr>
+        <th class="sortTitle">Movie Title<i class="fa fa-fw fa-sort"></i></th>
+        <th class="sortYear">Release Year<i class="fa fa-fw fa-sort"></i></th> 
+        <th>Genre<i class="fa fa-fw fa-sort"></i></th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {{#each MovieSortByTitle}}
+        {{> movieDetails}}
       {{/each}}
-    </select>
-    <input type="submit" value="Add/UpdateMovie">
-  </form>
+    </table>
+  </div>
 
-   <table>
-    <tr>
-      <th class="sortTitle">Movie Title</th>
-      <th>Release Year</th> 
-      <th>Genre</th>
-      <th>button1</th>
-      <th>button2</th>
-    </tr>
-    {{#each MovieSortByCreateDate}}
-      {{> movieDetails}}
-    {{/each}}
-  </table>
-
+  <div class="edit-section"> 
+    <div class="title"> 
+      <h1>Edit Section </h1>
+    </div>
+    <div class="content">
+      <p>Just writing some stuff  </p>
+    </div>
+  </div>
 </body>
 
 <!-- templates for the movie data  // start-->
@@ -39,7 +64,12 @@
       <td>{{movieTitle}}</td>
       <td>{{releaseYear}}</td> 
       <td>{{genre}}</td>
-      <td class="edit">Edit</td>
+      <td class="edit">
+        <div>Edit</div>
+      </td>
+      <td class="delete">
+        <div>Delete</div>
+      </td>
     </tr>
   </template> 
   <!-- /template for the movie details columns -->
