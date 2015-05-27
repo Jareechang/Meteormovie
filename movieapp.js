@@ -95,6 +95,12 @@
         Session.set('editHidden?', true);
       }
 
+      "click .cancel": function(){
+        // Hide the edit section
+        $('.edit-section').toggleClass('hide');
+        Session.set('editHidden?', true);
+      }
+
     });
 
     Template.movieDetails.events({
