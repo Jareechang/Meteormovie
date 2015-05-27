@@ -7,6 +7,8 @@
         Assets.getText("genre.json", function(err,data){
           JSON.parse(data).forEach(function(item,i,arr){
             Genre.insert(item);
+            item.count = 0;
+            GenreCount.insert(item);
           })
         });
       }
