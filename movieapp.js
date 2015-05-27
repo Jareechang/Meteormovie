@@ -2,8 +2,10 @@
 // ********** client Side code start (client/client.js)  **********************
 
   if (Meteor.isClient) {
+
     // set session for sorting tables
     Session.set("sortOption", {searchTitle: -1});
+    Session.set('editHidden?', true);
 
     Template.body.helpers({
     
@@ -38,7 +40,7 @@
           genre: genre,
           // implementing a normalized searchtitle (all-CAPS) in the document to 
           // off-set case-sensitve sorting  
-          searchTitle: movieTitle.toUpperCase(),
+          searchTitle: movieTitle.toLowerCase(),
           createdAt: new Date() 
         });
 
@@ -87,6 +89,10 @@
                       });
         // Reset the Movie ID to clear inputs
         Session.set('editMovieID', null);
+        
+        // upon updating hide edit section and reset edit hidden session variables
+        $('.edit-section').toggleClass('hide');
+        Session.set('editHidden?', true);
       }
 
     });
@@ -96,6 +102,16 @@
       "click .edit": function(){
         // Set session for storing the id on document clicked
         Session.set('editMovieID', this._id);
+        // Scroll back up to the top
+        $("html, body").animate({
+           scrollTop:0
+        },"slow");
+        // Only execute when edit section is hidden
+        if(Session.get('editHidden?')){
+          $('.edit-section').toggleClass('hide');
+          Session.set('editHidden?', false);
+        }
+
       },
       // Delete event handler 
       "click .delete": function(){
