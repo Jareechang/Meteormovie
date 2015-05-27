@@ -54,7 +54,6 @@
       // event for sorting movie title
 
       "click .sortTitle, click .sortYear": function(e){   
-         
         // Show newest tasks first
         switch(e.handleObj.selector){
             case '.sortTitle':
