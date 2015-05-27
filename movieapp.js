@@ -14,7 +14,11 @@
       // data for populating UI genre selections
       Genre: function(){
         return Genre.find({}, {sort: {genre: 1}});
+      },
+      editMovie: function(){
+        return Movies.findOne(Session.get('editMovieID', this._id));
       }
+
     });
 
     Template.body.events({
@@ -48,9 +52,7 @@
 
       "click .sortTitle, click .sortYear": function(e){   
          
-          // Show newest tasks first
-          // console.log(e.handleObj.selector);
-
+        // Show newest tasks first
         switch(e.handleObj.selector){
             case '.sortTitle':
               if(Session.get("sortOption").searchTitle === -1){
@@ -67,17 +69,35 @@
               }
               break;
         }
+      },
+
+      // Update event handler to update data in the selected document
+      "click .update": function(e,template){
+        var editMovieTitle = template.find('input[name=edtMovieTitle]').value;
+        var editReleaseYear = template.find('input[name=edtReleaseYear]').value;
+        var editGenre = template.find('select[name=edtGenre]').value;
+        
+        // Update the document with the edited details
+        Movies.update({ _id: Session.get('editMovieID')}, 
+                      {
+                        movieTitle: editMovieTitle,
+                        releaseYear: editReleaseYear,
+                        Genre: editGenre 
+                      });
+        // Reset the Movie ID to clear inputs
+        Session.set('editMovieID', null);
       }
 
     });
 
+
     Template.movieDetails.events({
-      // s
+      // Edit event handler to assign ID to session
       "click .edit": function(){
-        console.log(this._id);
-        console.dir(Movies.findOne(this._id));
+        // Set session for storing the id on document clicked
+        Session.set('editMovieID', this._id);
       },
-      // delete event handler 
+      // Delete event handler 
       "click .delete": function(){
         Movies.remove(this._id);
       }

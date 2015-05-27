@@ -28,6 +28,7 @@
     </div>
   </div> -->
   <div class="padding-md"></div>
+
   <div class="edit-section margin-sm"> 
     <div class="title"> 
       <h1>Edit Section </h1>
@@ -35,13 +36,15 @@
     <div class="content">
       <div class="details">
         <h5> Movie Details</h5>
-        <input type="text" name="movietitle" placeholder="Movie Name" />
-        <input type="text" name="releaseYear" placeholder="Relase Year" />
-        <select name="genre">
-          {{#each Genre}}
-            {{>genreOptions}}
-          {{/each}}
-        </select>
+        {{#with editMovie}}
+          <input type="text" name="edtMovieTitle" value="{{movieTitle}}" />
+          <input type="text" name="edtReleaseYear" value="{{releaseYear}}" />
+          <select name="edtGenre">
+            {{#each Genre}}
+              {{>genreOptions}}
+            {{/each}}
+          </select>
+        {{/with}}
       </div>
       <!-- {{/with}} -->
     </div>
