@@ -2,7 +2,6 @@
 // ********** client Side code start (client/client.js)  **********************
 
   if (Meteor.isClient) {
-
     // set session for sorting tables
     Session.set("sortOption", {searchTitle: -1});
     Session.set('editHidden?', true);
