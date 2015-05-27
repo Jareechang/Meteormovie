@@ -6,15 +6,16 @@
     Session.set("sortOption", {searchTitle: -1});
 
     Template.body.helpers({
-      // testing out client side template rendering 
+    
+      // Get all the movies from collection
       MovieSortByTitle: function () {
-        // Show newest tasks first
         return Movies.find({}, {sort: Session.get("sortOption") });
       },
-      // data for populating UI genre selections
+      // Data for populating UI genre selections
       Genre: function(){
         return Genre.find({}, {sort: {genre: 1}});
       },
+      // Get the current Movie details being clicked
       editMovie: function(){
         return Movies.findOne(Session.get('editMovieID', this._id));
       }
@@ -89,7 +90,6 @@
       }
 
     });
-
 
     Template.movieDetails.events({
       // Edit event handler to assign ID to session
