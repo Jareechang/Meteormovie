@@ -1,3 +1,29 @@
+// ********************* Client helper methods start   ********************************
+
+  // Helper function to set Cookie
+  var setCookie = function (c_name,value,exdays){
+      var exdate=new Date();
+      exdate.setDate(exdate.getDate() + exdays);
+      var c_value=escape(value) + 
+        ((exdays==null) ? "" : ("; expires="+exdate.toUTCString()));
+      document.cookie=c_name + "=" + c_value;
+  }
+
+  // Helper function to get cookie 
+  var getCookie = function(c_name){
+       var i,x,y,ARRcookies=document.cookie.split(";");
+      for (i=0;i<ARRcookies.length;i++){
+        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+        x=x.replace(/^\s+|\s+$/g,"");
+
+        if (x==c_name){
+         return unescape(y);
+        }
+      }
+  }
+
+// ********************* Client helper methods end  ********************************
 
 // ********** client Side code start (client/client.js)  **********************
 
@@ -6,11 +32,19 @@
     Session.set("sortOption", {searchTitle: -1});
     Session.set('editHidden?', true);
 
+    /* 
+      Here we are using cookies to persist Guest's data based on the random id assigned to their cookie. 
+      If it exists, we assign a new ID for a duration of 120 days 
+    */
+    if(!getCookie('meteorGuestMovieApp')){
+      setCookie('meteorGuestMovieApp', Random.id(), 120);
+    }
+
     Template.body.helpers({
     
       // Get all the movies from collection
       MovieSortByTitle: function () {
-        return Movies.find({}, {sort: Session.get("sortOption") });
+        return Movies.find({ createdBy: getCookie('meteorGuestMovieApp') }, {sort: Session.get("sortOption") });
       },
       // Data for populating UI genre selections
       Genre: function(){
@@ -18,7 +52,8 @@
       },
       // Get the current Movie details being clicked
       editMovie: function(){
-        return Movies.findOne(Session.get('editMovieID', this._id));
+        return Movies.findOne({createdBy: getCookie('meteorGuestMovieApp'), 
+                               _id: Session.get('editMovieID', this._id)});
       }
 
     });
@@ -40,6 +75,8 @@
           // implementing a normalized searchtitle (all-CAPS) in the document to 
           // off-set case-sensitve sorting  
           searchTitle: movieTitle.toLowerCase(),
+          createdBy: getCookie('meteorGuestMovieApp'),
+          genreCount: Genre.find().fetch(),
           createdAt: new Date() 
         });
 
@@ -106,15 +143,15 @@
       "click .edit": function(){
         // Set session for storing the id on document clicked
         Session.set('editMovieID', this._id);
-        // Scroll back up to the top
-        $("html, body").animate({
-           scrollTop:0
-        },"slow");
         // Only execute when edit section is hidden
         if(Session.get('editHidden?')){
           $('.edit-section').toggleClass('hide');
           Session.set('editHidden?', false);
         }
+        // Scroll back up to the top
+        $("html, body").animate({
+           scrollTop: $('.edit-section').offset().top
+        },"slow");
 
       },
       // Delete event handler 

@@ -1,10 +1,5 @@
 $(function(){
-    // var movieCollection = Movies.find().fetch();
-    
-   
-    // _.pluck(Genre.find().fetch(), "genre");
-    
-  
+     
     // genreCollection.insert({
     //   count: 
     // })
