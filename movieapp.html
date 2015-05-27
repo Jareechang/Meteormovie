@@ -1,48 +1,48 @@
 <head>
   <title>movieforLULz</title>
-     <meta charset="utf-8">
+  <meta charset="utf-8">
+  <!-- font awesome for logos -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.1/nv.d3.min.css" rel="stylesheet" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.1/nv.d3.min.js"></script>
+  <!-- nvd and d3 cdn links for charts and graphs -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.1/nv.d3.min.css" rel="stylesheet" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.1/nv.d3.min.js"></script>
+  <!-- JQuery cdn -->
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <!-- custom chart javascript file -->
   <script src="chart.js"></script>
 </head>
 
 <body>
-<div class="header">
-  <div class="header-title left">
-    <h1>Popcorn Analytics<i class="fa fa-ticket padding-xs"></i></h1>
-  </div>
-  <div class="form-field right">
-    <form class="new-movie">
-      <input type="text" name="movietitle" placeholder="Movie Name" />
-      <input type="text" name="releaseYear" placeholder="Relase Year" />
-      <select name="genre">
-        {{#each Genre}}
-          {{>genreOptions}}
-        {{/each}}
-      </select>
-      <input class="btn-blue-border" type="submit" value="Add Movie">
-    </form>
-  </div>
-</div>
-<!-- 
-  <div class="analytics">
-    <div class="filter"> 
-      <h1> Analytics stuff</h1>
+  <div class="header">
+    <div class="header-title left">
+      <h1>Popcorn Analytics<i class="fa fa-ticket padding-xs"></i></h1>
     </div>
-  </div> -->
+    <div class="form-field right">
+      <form class="new-movie">
+        <input type="text" name="movietitle" placeholder="Movie Name" />
+        <input type="text" name="releaseYear" placeholder="Relase Year" />
+        <select name="genre">
+          {{#each Genre}}
+            {{>genreOptions}}
+          {{/each}}
+        </select>
+        <input class="btn-blue-border" type="submit" value="Add Movie">
+      </form>
+    </div>
+  </div>
+
   <div class="padding-md"></div>
+  
   <div class="analytics"> 
     <div class="title">
       <h1> Analytics</h1>
     </div>
-    <div id="chart1"  class='with-transitions'> 
-      <svg></svg>
-    </div>
+    
+      <svg id="test1" class="mypiechart"></svg>
   </div>
+
   <div class="edit-section margin-sm hide"> 
     <div class="title"> 
       <h1>Edit Section </h1>
@@ -60,17 +60,19 @@
           </select>
         {{/with}}
       </div>
-      <!-- {{/with}} -->
+      
     </div>
     <div class="footer">
       <p class="update btn-blue-border">Update</p>
       <p class="cancel btn-blue-border">Cancel</p>
     </div>
   </div>
+
   <div class="facebook-oauth">
      {{> loginButtons}}
   </div>
   <div class="padding-xs"></div>
+
   <div class="movie-section margin-sm"> 
     <div class="footer-title"> 
       <h1>Movies</h1>

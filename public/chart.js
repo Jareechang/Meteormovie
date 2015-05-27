@@ -1,94 +1,36 @@
 $(function(){
-  nv.addGraph(function() {
-        var chart = nv.models.lineChart();
-        var fitScreen = false;
-        var width = 400;
-        var height = 250;
-        var zoom = 1;
-        var svg = d3.select("body").append("svg");
-        svg.append("rect")
-    .attr("fill", "pink");
-        chart.useInteractiveGuideline(true);
-        chart.xAxis
-            .tickFormat(d3.format(',r'));
-        chart.lines.dispatch.on("elementClick", function(evt) {
-            console.log(evt);
-        });
-        chart.yAxis
-            .axisLabel('Voltage (v)')
-            .tickFormat(d3.format(',.2f'));
-        d3.select('#chart1 svg')
-            .attr('perserveAspectRatio', 'xMinYMid')
-            .attr('width', width)
-            .attr('height', height)
 
-            .datum(sinAndCos());
-        setChartViewBox();
-        resizeChart();
-        nv.utils.windowResize(resizeChart);
-        d3.select('#zoomIn').on('click', zoomIn);
-        d3.select('#zoomOut').on('click', zoomOut);
-        function setChartViewBox() {
-            var w = width * zoom,
-                h = height * zoom;
-            chart
-                .width(w)
-                .height(h);
-            d3.select('#chart1 svg')
-                .attr('viewBox', '0 0 ' + w + ' ' + h)
-                .transition().duration(500)
-                .call(chart);
-        }
-        function zoomOut() {
-            zoom += .25;
-            setChartViewBox();
-        }
-        function zoomIn() {
-            if (zoom <= .5) return;
-            zoom -= .25;
-            setChartViewBox();
-        }
-        // This resize simply sets the SVG's dimensions, without a need to recall the chart code
-        // Resizing because of the viewbox and perserveAspectRatio settings
-        // This scales the interior of the chart unlike the above
-        function resizeChart() {
-            var container = d3.select('#chart1');
-            var svg = container.select('svg');
-            if (fitScreen) {
-                // resize based on container's width AND HEIGHT
-                var windowSize = nv.utils.windowSize();
-                svg.attr("width", windowSize.width);
-                svg.attr("height", windowSize.height);
-            } else {
-                // resize based on container's width
-                var aspect = chart.width() / chart.height();
-                var targetWidth = parseInt(container.style('width'));
-                svg.attr("width", targetWidth);
-                svg.attr("height", Math.round(targetWidth / aspect));
-            }
-        }
-        return chart;
+    var testdata = [
+        {key: "One", y: 20},
+        {key: "Two", y: 20},
+        {key: "Three", y: 20},
+        {key: "Four", y: 20},
+        {key: "Five", y: 5},
+        {key: "Six", y: 5},
+        {key: "Seven", y: 10}
+    ];
+
+    var height = 350;
+    var width = 350;
+    var chart1;
+    nv.addGraph(function() {
+        var chart1 = nv.models.pieChart()
+            .x(function(d) { return d.key })
+            .y(function(d) { return d.y })
+            .donut(true)
+            .width(width)
+            .height(height)
+            .padAngle(.08)
+            .cornerRadius(5)
+            .id('donut1'); // allow custom CSS for this one svg
+        chart1.title("100%");
+        chart1.pie.donutLabelsOutside(true).donut(true);
+        d3.select("#test1")
+            .datum(testdata)
+            .transition().duration(1200)
+            .call(chart1);
+        //nv.utils.windowResize(chart1.update);
+        return chart1;
     });
-    function sinAndCos() {
-        var sin = [],
-            cos = [];
-        for (var i = 0; i < 100; i++) {
-            sin.push({x: i, y: Math.sin(i/10) });
-            cos.push({x: i, y: .5 * Math.cos(i/10)});
-        }
-        return [
-            {
-                values: sin,
-                key: "Sine Wave",
-                color: "#ff7f0e"
-            },
-            {
-                values: cos,
-                key: "Cosine Wave",
-                color: "#2ca02c"
-            }
-        ];
-    }
-
 })
   
