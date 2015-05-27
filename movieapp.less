@@ -6,14 +6,16 @@ body,html {
   height:100%;
   width:100%;
   font-family: arial;
+  color:#3c3c3c;
 }
 
 /*custom form style*/
 input, textarea, select {
-  border-radius: 3px;
+  border-radius: 0.45em;
   padding: 1rem;
   font-weight: 300;
   background-color:white;
+  border:3px solid rgba(79, 163, 142, 0.39);
 }
 body {
     background-image: url('oct-pattern.png');
@@ -31,12 +33,7 @@ table {
 
 table {
   border:2px solid rgb(197, 197, 197);
-  border-collapse:collapse
-}
-
-th {
-  color:rgb(27, 128, 133);
-  background-color:lightgrey;
+  border-collapse:collapse;
 }
 
 tr,td ,th{
@@ -44,7 +41,10 @@ tr,td ,th{
   max-height:30px;
 }
 
-
+th {
+  color:rgb(27, 128, 133);
+  background-color:rgb(203, 232, 225);
+}
 .header {
   border-bottom:0.2em solid rgba(128, 128, 128, 0.28);
   position:fixed;
@@ -81,7 +81,6 @@ tr,td ,th{
 }
 
 .movie-section {
-  border-top: 0.25em solid black;
   margin:0 auto 0 auto;
   width:80%; 
   .footer-title {
@@ -109,10 +108,9 @@ tr,td ,th{
 }
 
 .delete, .edit {
-  div {
+  p {
+    background-color:#b9e7df;
     margin:3px auto 3px auto;
-    border:3px rgba(213, 205, 205, 0.64) solid;
-    background-color:#F4F0C2;
     width:50%;
     height:50%;
   }
@@ -184,5 +182,11 @@ tr,td ,th{
   font-size:0.75em ;
 }
 
-
+/*custom button styles*/
+.btn-blue-border {
+  border:0.1em solid rgba(85, 177, 176, 0.85);
+  border-bottom:0.4em solid rgba(85, 177, 176, 0.85);
+  border-radius:0.35em;
+  font-style:bold;
+}
 
