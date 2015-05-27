@@ -9,3 +9,6 @@ autopublish
 insecure
 less
 jquery
+accounts-ui
+accounts-password
+accounts-facebook

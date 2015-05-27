@@ -93,7 +93,7 @@
         // upon updating hide edit section and reset edit hidden session variables
         $('.edit-section').toggleClass('hide');
         Session.set('editHidden?', true);
-      }
+      },
 
       "click .cancel": function(){
         // Hide the edit section
