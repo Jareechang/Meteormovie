@@ -42,7 +42,7 @@
       // set session for sorting tables
       Session.set("sortOption", {searchTitle: -1});
       Session.set('editHidden?', true);
-
+      Session.set('userData', []);
       /* 
         Here we are using cookies to persist Guest's data based on the random id assigned to their cookie. 
         If it exists, we assign a new ID for a duration of 120 days 
@@ -58,58 +58,62 @@
       Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
 
     // fetches user data from collection by GUEST ID then get the genrecounter attribute
-    setTimeout(function(){
+    
       var userData = Session.get('userData');
 
       // Filter results for items only have count greater than zero
-
-       var userData = _.filter(Session.get('userData')[0].genrecounter,function(item){
-            return item.count > 0
-        })
-
-        var height = 350;
-        var width = 350;
+      if(userData && userData.length > 0){
 
 
-        var chart = nv.models.pieChart()
-            .x(function(d) { 
-                return d.genre 
-            })
-            .y(function(d) { return d.count })
-            .donut(true)
-            .width(width)
-            .height(height)
-            .padAngle(.08)
-            .cornerRadius(5)
-            .id('donut1'); // allow custom CSS for this one svg
-
-        nv.addGraph(function() {
-            chart.title("100%");
-            chart.pie.donutLabelsOutside(true).donut(true).labelType("percent") ;
-            d3.select("#chart")
-                .datum(userData)
-                .transition().duration(1200)
-                .call(chart);
-            //nv.utils.windowResize(chart1.update);
-            return chart;
-        });
-
-      
-    
-      Tracker.autorun(function () {
-        
-          var newData =  _.filter(Session.get('userData')[0].genrecounter,function(item){
+         var userData = _.filter(Session.get('userData')[0].genrecounter,function(item){
               return item.count > 0
           })
-          if(newData && newData.length > 0){
-              d3.select('#chart').datum(newData).call(chart);
-              chart.update();
+
+          var height = 350;
+          var width = 350;
+
+
+          var chart = nv.models.pieChart()
+              .x(function(d) { 
+                  return d.genre 
+              })
+              .y(function(d) { return d.count })
+              .donut(true)
+              .width(width)
+              .height(height)
+              .padAngle(.08)
+              .cornerRadius(5)
+              .id('donut1'); // allow custom CSS for this one svg
+
+          nv.addGraph(function() {
+              chart.title("100%");
+              chart.pie.donutLabelsOutside(true).donut(true).labelType("percent") ;
+              d3.select("#chart")
+                  .datum(userData)
+                  .transition().duration(1200)
+                  .call(chart);
+              //nv.utils.windowResize(chart1.update);
+              return chart;
+          });
+
+        
+      
+        Tracker.autorun(function () {
+          if(userData && userData.length > 0){
+              var newData =  _.filter(Session.get('userData')[0].genrecounter,function(item){
+                  return item.count > 0
+              })
+              if(newData && newData.length > 0){
+                  d3.select('#chart').datum(newData).call(chart);
+                  chart.update();
+              }
+              
           }
-          
-      });
+        });
+      }
 
 
-    },10000)
+
     
     }
     Template.body.helpers({
