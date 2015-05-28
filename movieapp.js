@@ -51,22 +51,22 @@
         // Give guest user a new cookie
         setCookie('meteorGuestMovieApp', Random.id(), 120);
       }
-      Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
+      
     });
 
     Template.body.rendered = function(){
-      userData = Session.get('userData');
+      Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
 
     // fetches user data from collection by GUEST ID then get the genrecounter attribute
-    
-    if(userData && userData.length > 0){
-      console.log('this is user data intitally')
-    console.log(userData);
+    setTimeout(function(){
+      var userData = Session.get('userData');
+      console.log('its running!');
+      console.log(Session.get('userData'));
+    if(Session.get('userData') && Session.get('userData')[0]){
 
-        userData = userData[0].genrecounter;
-        // Filter results for items only have count greater than zero
+      // Filter results for items only have count greater than zero
 
-        userData = _.filter(userData,function(item){
+       var userData = _.filter(Session.get('userData')[0].genrecounter,function(item){
             return item.count > 0
         })
 
@@ -74,17 +74,17 @@
         var width = 350;
 
 
-          var chart = nv.models.pieChart()
-              .x(function(d) { 
-                  return d.genre 
-              })
-              .y(function(d) { return d.count })
-              .donut(true)
-              .width(width)
-              .height(height)
-              .padAngle(.08)
-              .cornerRadius(5)
-              .id('donut1'); // allow custom CSS for this one svg
+        var chart = nv.models.pieChart()
+            .x(function(d) { 
+                return d.genre 
+            })
+            .y(function(d) { return d.count })
+            .donut(true)
+            .width(width)
+            .height(height)
+            .padAngle(.08)
+            .cornerRadius(5)
+            .id('donut1'); // allow custom CSS for this one svg
 
         nv.addGraph(function() {
             chart.title("100%");
@@ -100,9 +100,8 @@
       
     }
       Tracker.autorun(function () {
-       
         
-        if(Session.get('userData') && Session.get('userData').length > 0){
+        if(Session.get('userData') && Session.get('userData')[0]){
           // console.log(chart);
           // console.log('updating....');
           // console.dir(Session.get('userData'));
@@ -116,6 +115,9 @@
             
           }
       });
+
+
+    },4500)
     
     }
     Template.body.helpers({
@@ -182,21 +184,14 @@
             if(err){
               console.log(err);
             }else{
+              // Updating chart when Guest adds new movie
               var updateData = Session.get('userData');
               var updateField = _.find(updateData[0].genrecounter, function(analytics){
                   return analytics.genre === genre
               })
-              console.log('update data');
-              console.log(updateData);
-              setTimeout(function(){
-                console.log('update field');
-                console.log(updateField);
-                updateField.count += 1; 
-                Session.set('userData', updateData);
-                console.log(Session.get('userData'));
-              }, 300);
+              updateField.count += 1; 
+              Session.set('userData', updateData);
             }
-           // Session.set('userData', [{genre: 'Comedy', count: 4}]);
         });
         
         // Clear form
@@ -276,7 +271,18 @@
       },
       // Delete event handler 
       "click .delete": function(){
-        Movies.remove(this._id);
+          var thisRef = this; 
+          Movies.remove(thisRef._id);
+
+          // Updating Chart when Guest deletes movies
+          var deleteData = Session.get('userData');
+          var deleteField = _.find(deleteData[0].genrecounter, function(analytics){
+              return analytics.genre === thisRef.genre
+          })
+
+          deleteField.count -= 1; 
+          Session.set('userData', deleteData);
+          
       }
 
     })
