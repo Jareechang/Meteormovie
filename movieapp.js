@@ -80,9 +80,8 @@
           Here we are initially creating a collection for the guest users based on the ID assigned to them
           Additionally, we add a document for managing their analytics
         */
-        
+
         // If they are a new guest, create a new document to manage their data
-        console.log('getcookie ' + getCookie('meteorGuestMovieApp'));
         if(UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp')} ).count() === 0 ){
 
           UserAnalytics.insert({
@@ -110,6 +109,12 @@
           createdAt: new Date() 
         });
 
+        // Find the guest User data document ** to get its document ID 
+        var guestDataID = UserAnalytics.findOne({guestID: getCookie('meteorGuestMovieApp')})._id;
+        var guestCookieID = getCookie('meteorGuestMovieApp');
+
+        Meteor.call('UserAnalyticsUpdate', guestDataID, genre, guestCookieID);
+        
         // Clear form
         e.target.movietitle.value = "";
         e.target.releaseYear.value = "";
