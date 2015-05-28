@@ -51,8 +51,73 @@
         // Give guest user a new cookie
         setCookie('meteorGuestMovieApp', Random.id(), 120);
       }
+      Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
     });
+
+    Template.body.rendered = function(){
+      userData = Session.get('userData');
+
+    // fetches user data from collection by GUEST ID then get the genrecounter attribute
     
+    if(userData && userData.length > 0){
+      console.log('this is user data intitally')
+    console.log(userData);
+
+        userData = userData[0].genrecounter;
+        // Filter results for items only have count greater than zero
+
+        userData = _.filter(userData,function(item){
+            return item.count > 0
+        })
+
+        var height = 350;
+        var width = 350;
+
+
+          var chart = nv.models.pieChart()
+              .x(function(d) { 
+                  return d.genre 
+              })
+              .y(function(d) { return d.count })
+              .donut(true)
+              .width(width)
+              .height(height)
+              .padAngle(.08)
+              .cornerRadius(5)
+              .id('donut1'); // allow custom CSS for this one svg
+
+        nv.addGraph(function() {
+            chart.title("100%");
+            chart.pie.donutLabelsOutside(true).donut(true).labelType("percent") ;
+            d3.select("#chart")
+                .datum(userData)
+                .transition().duration(1200)
+                .call(chart);
+            //nv.utils.windowResize(chart1.update);
+            return chart;
+        });
+
+      
+    }
+      Tracker.autorun(function () {
+       
+        
+        if(userData && userData.length > 0){
+          console.log(chart);
+          console.log('updating....');
+          console.dir(Session.get('userData'));
+          var newData =  _.filter(Session.get('userData'),function(item){
+              return item.count > 0
+          })
+          if(newData && newData.length > 0){
+              d3.select('#chart').datum(newData).call(chart);
+              chart.update();
+            }
+            
+          }
+      });
+    
+    }
     Template.body.helpers({
     
       // Get all the movies from collection
@@ -91,7 +156,7 @@
           })
           
         } 
-
+       
         // Gets the values from the form on submit
         var movieTitle = e.target.movietitle.value;
         var releaseYear = e.target.releaseYear.value;
@@ -113,7 +178,10 @@
         var guestDataID = UserAnalytics.findOne({guestID: getCookie('meteorGuestMovieApp')})._id;
         var guestCookieID = getCookie('meteorGuestMovieApp');
 
-        Meteor.call('UserAnalyticsUpdate', guestDataID, genre, guestCookieID);
+        Meteor.call('UserAnalyticsUpdate', guestDataID, genre, guestCookieID, function(){
+            console.log('updated');
+           Session.set('userData', [{genre: 'Comedy', count: 4}]);
+        });
         
         // Clear form
         e.target.movietitle.value = "";
