@@ -20,7 +20,7 @@
 
             UserAnalytics.update({_id: DataID, 'genrecounter.genre': genreName},
                                  {$inc: { 'genrecounter.$.count': 1 } }    
-          )
+            )
         }
       }
     })

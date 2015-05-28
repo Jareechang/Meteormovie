@@ -102,11 +102,11 @@
       Tracker.autorun(function () {
        
         
-        if(userData && userData.length > 0){
-          console.log(chart);
-          console.log('updating....');
-          console.dir(Session.get('userData'));
-          var newData =  _.filter(Session.get('userData'),function(item){
+        if(Session.get('userData') && Session.get('userData').length > 0){
+          // console.log(chart);
+          // console.log('updating....');
+          // console.dir(Session.get('userData'));
+          var newData =  _.filter(Session.get('userData')[0].genrecounter,function(item){
               return item.count > 0
           })
           if(newData && newData.length > 0){
@@ -178,9 +178,25 @@
         var guestDataID = UserAnalytics.findOne({guestID: getCookie('meteorGuestMovieApp')})._id;
         var guestCookieID = getCookie('meteorGuestMovieApp');
 
-        Meteor.call('UserAnalyticsUpdate', guestDataID, genre, guestCookieID, function(){
-            console.log('updated');
-           Session.set('userData', [{genre: 'Comedy', count: 4}]);
+        Meteor.call('UserAnalyticsUpdate', guestDataID, genre, guestCookieID, function(err, res){
+            if(err){
+              console.log(err);
+            }else{
+              var updateData = Session.get('userData');
+              var updateField = _.find(updateData[0].genrecounter, function(analytics){
+                  return analytics.genre === genre
+              })
+              console.log('update data');
+              console.log(updateData);
+              setTimeout(function(){
+                console.log('update field');
+                console.log(updateField);
+                updateField.count += 1; 
+                Session.set('userData', updateData);
+                console.log(Session.get('userData'));
+              }, 300);
+            }
+           // Session.set('userData', [{genre: 'Comedy', count: 4}]);
         });
         
         // Clear form
