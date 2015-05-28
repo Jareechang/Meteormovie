@@ -1,4 +1,4 @@
-// ********************* Client helper methods start   ********************************
+// ********************* Client helper methods start   *********************************************
 
   // Helper function to set Cookie
   var setCookie = function (c_name,value,exdays){
@@ -23,23 +23,36 @@
       }
   }
 
-// ********************* Client helper methods end  ********************************
+  // Helper method for generating the analytics counter * adding a count key to the intial data set
+  var defaultGenreCount = function(){
+    var baseData = Genre.find().fetch()
+    _.each(baseData, function(name){
+      name.count = 0;
+    })
+    return baseData;
+  }
 
-// ********** client Side code start (client/client.js)  **********************
+// ********************* Client helper methods end  *******************************************
+
+// ********** client Side code start (client/client.js)  ***************************************
 
   if (Meteor.isClient) {
-    // set session for sorting tables
-    Session.set("sortOption", {searchTitle: -1});
-    Session.set('editHidden?', true);
 
-    /* 
-      Here we are using cookies to persist Guest's data based on the random id assigned to their cookie. 
-      If it exists, we assign a new ID for a duration of 120 days 
-    */
-    if(!getCookie('meteorGuestMovieApp')){
-      setCookie('meteorGuestMovieApp', Random.id(), 120);
-    }
+    Meteor.startup(function () {
+      // set session for sorting tables
+      Session.set("sortOption", {searchTitle: -1});
+      Session.set('editHidden?', true);
 
+      /* 
+        Here we are using cookies to persist Guest's data based on the random id assigned to their cookie. 
+        If it exists, we assign a new ID for a duration of 120 days 
+      */
+      if(!getCookie('meteorGuestMovieApp')){
+        // Give guest user a new cookie
+        setCookie('meteorGuestMovieApp', Random.id(), 120);
+      }
+    });
+    
     Template.body.helpers({
     
       // Get all the movies from collection
@@ -62,6 +75,24 @@
       'submit .new-movie': function (e) {
         // prevent default behaviour 
         e.preventDefault();
+        
+        /* 
+          Here we are initially creating a collection for the guest users based on the ID assigned to them
+          Additionally, we add a document for managing their analytics
+        */
+        
+        // If they are a new guest, create a new document to manage their data
+        console.log('getcookie ' + getCookie('meteorGuestMovieApp'));
+        if(UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp')} ).count() === 0 ){
+
+          UserAnalytics.insert({
+              guestID: getCookie('meteorGuestMovieApp'),
+              // Using helper to create the base counter set 
+              genrecounter: defaultGenreCount(Genre.find().fetch())
+          })
+          
+        } 
+
         // Gets the values from the form on submit
         var movieTitle = e.target.movietitle.value;
         var releaseYear = e.target.releaseYear.value;
@@ -76,7 +107,6 @@
           // off-set case-sensitve sorting  
           searchTitle: movieTitle.toLowerCase(),
           createdBy: getCookie('meteorGuestMovieApp'),
-          genreCount: Genre.find().fetch(),
           createdAt: new Date() 
         });
 
@@ -89,7 +119,8 @@
       },
       // event for sorting movie title
 
-      "click .sortTitle, click .sortYear": function(e){   
+      "click .sortTitle, click .sortYear": function(e){  
+      console.log( Genre.find().count() ); 
         // Show newest tasks first
         switch(e.handleObj.selector){
             case '.sortTitle':
