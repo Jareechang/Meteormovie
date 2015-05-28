@@ -60,9 +60,6 @@
     // fetches user data from collection by GUEST ID then get the genrecounter attribute
     setTimeout(function(){
       var userData = Session.get('userData');
-      console.log('its running!');
-      console.log(Session.get('userData'));
-    if(Session.get('userData') && Session.get('userData')[0]){
 
       // Filter results for items only have count greater than zero
 
@@ -98,26 +95,21 @@
         });
 
       
-    }
+    
       Tracker.autorun(function () {
         
-        if(Session.get('userData') && Session.get('userData')[0]){
-          // console.log(chart);
-          // console.log('updating....');
-          // console.dir(Session.get('userData'));
           var newData =  _.filter(Session.get('userData')[0].genrecounter,function(item){
               return item.count > 0
           })
           if(newData && newData.length > 0){
               d3.select('#chart').datum(newData).call(chart);
               chart.update();
-            }
-            
           }
+          
       });
 
 
-    },4500)
+    },10000)
     
     }
     Template.body.helpers({
