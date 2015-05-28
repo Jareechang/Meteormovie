@@ -125,7 +125,7 @@
       // event for sorting movie title
 
       "click .sortTitle, click .sortYear": function(e){  
-      console.log( Genre.find().count() ); 
+      
         // Show newest tasks first
         switch(e.handleObj.selector){
             case '.sortTitle':

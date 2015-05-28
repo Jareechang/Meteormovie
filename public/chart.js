@@ -1,9 +1,14 @@
 $(function(){
      
-    // genreCollection.insert({
-    //   count: 
-    // })
+   // console.log(UserAnalytics().find({}) )
+   var guestCookieID = document.cookie.replace('meteorGuestMovieApp=','');
 
+   setTimeout(function(){
+    // Off set collecion find for chained undefined error 
+       var userData = (UserAnalytics.find({guestID: guestCookieID}).fetch()[0].genrecounter);
+   }, 100)
+   
+  
     var testdata = [
         {key: "One", y: 20},
         {key: "Two", y: 20},
