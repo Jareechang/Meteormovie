@@ -14,12 +14,14 @@
 
     Meteor.methods({
       UserAnalyticsUpdate: function(DataID, genreName, guestCookieID){
-        console.log('id ' + DataID);
-        console.log('genre ' + genreName );
-        console.log(guestCookieID);
-        UserAnalytics.update({_id: DataID, 'genrecounter.genre': genreName},
-                             {$inc: { 'genrecounter.$.count': 1 } }    
-        )
+        var userCount = UserAnalytics.find({_id: DataID, guestID: guestCookieID}).count();
+        // If user found based on Data ID and cookie ID then update user
+        if(userCount){
+
+            UserAnalytics.update({_id: DataID, 'genrecounter.genre': genreName},
+                                 {$inc: { 'genrecounter.$.count': 1 } }    
+          )
+        }
       }
     })
   }
