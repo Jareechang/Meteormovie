@@ -22,7 +22,12 @@
                                  {$inc: { 'genrecounter.$.count': 1 } }    
             )
         }
+      },
+      getGuestData: function(guestCookieID){
+        console.log('this got called')
+        return UserAnalytics.find({guestID: guestCookieID}).fetch();
       }
+
     })
 
   }

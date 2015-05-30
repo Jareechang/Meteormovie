@@ -31,6 +31,43 @@
     })
     return baseData;
   }
+  // Function for generating chart with the data
+  var generateChart = function(data){
+    console.log('graph being generated wiht this data = ');
+    console.dir(data);
+      var height = 350;
+      var width = 350;
+
+
+      var chart = nv.models.pieChart()
+          .x(function(d) { return d.genre })
+          .y(function(d) { return d.count })
+          .donut(true)
+          .width(width)
+          .height(height)
+          .padAngle(.08)
+          .cornerRadius(5)
+          .id('donut1'); // allow custom CSS for this one svg
+
+      nv.addGraph(function() {
+          chart.title("100%");
+          chart.pie.donutLabelsOutside(true).donut(true).labelType("percent") ;
+          d3.select("#chart")
+              .datum(data)
+              .transition().duration(1200)
+              .call(chart);
+          //nv.utils.windowResize(chart1.update);
+          return chart;
+      });
+
+      Tracker.autorun(function () {
+
+        d3.select('#chart').datum(Session.get('userData')).call(chart);
+        chart.update();
+      });
+      
+
+  }
 
 // ********************* Client helper methods end  *******************************************
 
@@ -42,7 +79,7 @@
       // set session for sorting tables
       Session.set("sortOption", {searchTitle: -1});
       Session.set('editHidden?', true);
-      Session.set('userData', []);
+      Session.set('userData', [])
       /* 
         Here we are using cookies to persist Guest's data based on the random id assigned to their cookie. 
         If it exists, we assign a new ID for a duration of 120 days 
@@ -55,65 +92,30 @@
     });
 
     Template.body.rendered = function(){
-      Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
+      // Session.set('userData', UserAnalytics.find({guestID: getCookie('meteorGuestMovieApp') }).fetch());
 
     // fetches user data from collection by GUEST ID then get the genrecounter attribute
-    
-      var userData = Session.get('userData');
+        Meteor.call('getGuestData', getCookie('meteorGuestMovieApp'), function(err,result){
+          if(err){
+            console.log(err);
+          }else{
 
-      // Filter results for items only have count greater than zero
-      if(userData && userData.length > 0){
-
-
-         var userData = _.filter(Session.get('userData')[0].genrecounter,function(item){
-              return item.count > 0
-          })
-
-          var height = 350;
-          var width = 350;
-
-
-          var chart = nv.models.pieChart()
-              .x(function(d) { 
-                  return d.genre 
+            if(result.length > 0){  
+              var result = _.filter(result[0].genrecounter,function(item){
+                return item.count > 0
               })
-              .y(function(d) { return d.count })
-              .donut(true)
-              .width(width)
-              .height(height)
-              .padAngle(.08)
-              .cornerRadius(5)
-              .id('donut1'); // allow custom CSS for this one svg
-
-          nv.addGraph(function() {
-              chart.title("100%");
-              chart.pie.donutLabelsOutside(true).donut(true).labelType("percent") ;
-              d3.select("#chart")
-                  .datum(userData)
-                  .transition().duration(1200)
-                  .call(chart);
-              //nv.utils.windowResize(chart1.update);
-              return chart;
-          });
-
-        
-      
-        Tracker.autorun(function () {
-          if(userData && userData.length > 0){
-              var newData =  _.filter(Session.get('userData')[0].genrecounter,function(item){
-                  return item.count > 0
-              })
-              if(newData && newData.length > 0){
-                  d3.select('#chart').datum(newData).call(chart);
-                  chart.update();
-              }
-              
+            }else {
+              // no filter
+            }
+            // Set User variable into a reactive variable on the client
+            Session.set('userData', result)
+            // Generate the chart for the user's data
+            generateChart(result);
+            
+            
           }
-        });
-      }
-
-
-
+        })
+    
     
     }
     Template.body.helpers({
@@ -182,11 +184,26 @@
             }else{
               // Updating chart when Guest adds new movie
               var updateData = Session.get('userData');
-              var updateField = _.find(updateData[0].genrecounter, function(analytics){
+              var updateField = _.find(updateData, function(analytics){
                   return analytics.genre === genre
               })
-              updateField.count += 1; 
-              Session.set('userData', updateData);
+              // If update Data exists -- Set time out for updateField_.find() to evaluate 
+
+                if(updateData && updateField){
+                  updateField.count += 1; 
+                  Session.set('userData', updateData);
+                }else{
+                  // create own data set 
+                  
+                  var dataSet = {};
+                  dataSet.genre = genre;
+                  dataSet.count = 1;
+                  
+                  updateData.push(dataSet);
+                  
+                  Session.set('userData', updateData);
+                }
+              
             }
         });
         
@@ -272,12 +289,18 @@
 
           // Updating Chart when Guest deletes movies
           var deleteData = Session.get('userData');
-          var deleteField = _.find(deleteData[0].genrecounter, function(analytics){
-              return analytics.genre === thisRef.genre
-          })
+          // If data exists, use the exisitng data
+          if(deleteData.length > 0){
+            var deleteField = _.find(deleteData, function(analytics){
+                return analytics.genre === thisRef.genre
+            })
 
-          deleteField.count -= 1; 
-          Session.set('userData', deleteData);
+            deleteField.count -= 1; 
+            Session.set('userData', deleteData);
+          }else {
+            //else, its Empty, create own data sets 
+            alert('you need to have data first!');
+          }
           
       }
 
